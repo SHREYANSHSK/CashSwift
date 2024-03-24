@@ -10,11 +10,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+
       title: 'Money Transfer',
       theme: ThemeData(
         primarySwatch: Colors.red,
+        useMaterial3: false
       ),
       home: home_Page(),
+
     );
   }
 }
