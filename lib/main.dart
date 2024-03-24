@@ -1,5 +1,7 @@
 import 'package:cash_swift/home_Page.dart';
+import 'package:cash_swift/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 
 
 void main() => runApp(MyApp());
@@ -8,7 +10,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
 
       title: 'Money Transfer',
@@ -16,7 +18,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
         useMaterial3: false
       ),
-      home: home_Page(),
+      home: login_Page(),
 
     );
   }
