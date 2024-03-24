@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "439548906028",
+    "project_id": "cash-swift-10e31",
+    "storage_bucket": "cash-swift-10e31.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439548906028:android:45e63dc0de664d584f1f89",
+        "android_client_info": {
+          "package_name": "com.example.cash_swift"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBW03S00Ypu9YDPh1KYwr54jDPywpcwJtc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

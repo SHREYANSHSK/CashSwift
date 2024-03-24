@@ -38,6 +38,8 @@ dependencies:
   google_fonts: ^6.2.1
   flutter_animate:
   get: ^4.6.6
+  image_picker: ^1.0.7
+  firebase_core: ^2.27.1
 
 dev_dependencies:
   flutter_test:
