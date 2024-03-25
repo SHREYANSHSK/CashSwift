@@ -238,7 +238,7 @@ class _login_PageState extends State<login_Page> {
                                           },
                                           codeSent: (String verificationId,
                                               int? resendToken) {
-                                            Get.to(codeVerification_Page(verificationId: verificationId));
+                                            Get.to(codeVerification_Page(verificationId: verificationId,PHONE_NUMBER: Phno.text.toString(),));
                                           },
                                           codeAutoRetrievalTimeout:
                                               (String verificationId) {},
@@ -264,7 +264,7 @@ class _login_PageState extends State<login_Page> {
                                           },
                                           codeSent: (String verificationId,
                                               int? resendToken) {
-                                            Get.to(signUp_Page());
+                                            Get.to(signUp_Page(PHONE_NUMBER: Phno.text.toString(),));
                                           },
                                           codeAutoRetrievalTimeout:
                                               (String verificationId) {},

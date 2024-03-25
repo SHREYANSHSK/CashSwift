@@ -15,7 +15,7 @@ import 'package:image_picker/image_picker.dart';
 import 'UiHelper.dart';
 
 class signUp_Page extends StatefulWidget {
-  const signUp_Page({super.key});
+  const signUp_Page({super.key,required PHONE_NUMBER});
 
   @override
   State<signUp_Page> createState() => signUp_PageState();
@@ -95,7 +95,8 @@ class signUp_PageState extends State<signUp_Page> {
     await FirebaseFirestore.instance.collection("users").doc(phNo.text.toString()).set(
         {"Name":name.text.toString(),
           "phoneNumber":phNo.text.toString(),
-          "profilePicUrl":url
+          "profilePicUrl":url,
+          "balance":"1000.00"
         }).then((value) => UiHelper().snackBar(titleMsg: "SUCCESS", subTitleMsg: "User Registered",bgColor: Colors.green));
   }
 
@@ -341,7 +342,7 @@ class signUp_PageState extends State<signUp_Page> {
                                   int? resendToken) {
                                 uploadData();
                                 Get.to(codeVerification_Page(
-                                  verificationId: verificationId,
+                                  verificationId: verificationId,PHONE_NUMBER: phNo.text.toString(),
                                 ),);
                               },
                               codeAutoRetrievalTimeout:

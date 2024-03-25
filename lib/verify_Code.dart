@@ -10,8 +10,9 @@ import 'package:pinput/pinput.dart';
 
 class codeVerification_Page extends StatefulWidget {
   String verificationId;
+   String PHONE_NUMBER;
 
-  codeVerification_Page({super.key, required this.verificationId});
+  codeVerification_Page({super.key, required this.verificationId,required this.PHONE_NUMBER});
 
   @override
   State<codeVerification_Page> createState() => _codeVerification_PageState();
@@ -23,6 +24,8 @@ class _codeVerification_PageState extends State<codeVerification_Page> {
   String ErrorText = "";
 
   final pinController = TextEditingController();
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +130,7 @@ class _codeVerification_PageState extends State<codeVerification_Page> {
                             subTitleMsg: "Logged in Successfully",
                             bgColor: Colors.green,
                             iconData: Icons.verified_outlined);
-                        Get.to(home_Page());
+                        Get.to(home_Page(PHONE_NUMBER: widget.PHONE_NUMBER,));
                       });
 
                     } catch (ex) {
