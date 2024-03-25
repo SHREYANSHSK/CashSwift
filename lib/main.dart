@@ -1,6 +1,5 @@
 import 'package:cash_swift/firebase_options.dart';
-import 'package:cash_swift/login_page.dart';
-import 'package:cash_swift/pay_page.dart';
+import 'package:cash_swift/home_Page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -21,10 +20,10 @@ class MyApp extends StatelessWidget {
 
       title: 'Money Transfer',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.red,  
         useMaterial3: false
       ),
-      home: pay_page()
+      home: home_Page(PHONE_NUMBER: "8949834670")
 
     );
   }

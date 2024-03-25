@@ -44,6 +44,10 @@ dependencies:
   pinput: ^4.0.0
   firebase_storage: ^11.6.10
   cloud_firestore: ^4.15.9
+  custom_alert_dialog_box: ^1.0.2
+  mobile_scanner: ^4.0.1
+  qr_flutter: ^4.1.0
+  flutter_barcode_scanner: ^2.0.0
 
 dev_dependencies:
   flutter_test:

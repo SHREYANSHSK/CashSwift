@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-
-
 import 'package:cash_swift/verify_Code.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'UiHelper.dart';
 
 class signUp_Page extends StatefulWidget {
