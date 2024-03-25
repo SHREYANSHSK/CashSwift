@@ -40,6 +40,10 @@ dependencies:
   get: ^4.6.6
   image_picker: ^1.0.7
   firebase_core: ^2.27.1
+  firebase_auth: ^4.17.9
+  pinput: ^4.0.0
+  firebase_storage: ^11.6.10
+  cloud_firestore: ^4.15.9
 
 dev_dependencies:
   flutter_test:
