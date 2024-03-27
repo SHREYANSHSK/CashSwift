@@ -1,11 +1,10 @@
-
+import 'package:cash_swift/UiHelper.dart';
 import 'package:cash_swift/pay_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -25,14 +24,19 @@ class _home_PageState extends State<home_Page> {
 
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
-      _scanBarcode=barcodeScanRes;
-      Get.to(pay_page(_scanBarcode));
+          '#ff6666', "", true, ScanMode.QR);
+      _scanBarcode = barcodeScanRes;
     } on PlatformException {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Error occured while scanning QR code")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Error occured while scanning QR code")));
       barcodeScanRes = 'Unable to scan';
     }
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    } else if (mounted) {
+      print("home" + widget.PHONE_NUMBER);
+      Get.to(pay_page(_scanBarcode, widget.PHONE_NUMBER));
+    }
     setState(() {
       _scanBarcode = barcodeScanRes;
     });
@@ -116,73 +120,108 @@ class _home_PageState extends State<home_Page> {
                                                 left: BorderSide(
                                                     strokeAlign: 3,
                                                     width: 10))),
-                                        child: InkWell(onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return SizedBox(height: 300,width: 300,
-                                                child: AlertDialog(
-                                                  backgroundColor: const Color.fromRGBO(
-                                                      15, 15, 15, 1),
-                                                  shape: RoundedRectangleBorder(
-                                                    side: BorderSide(color:
-                                                    Colors.black38!), borderRadius:
-                                                  const BorderRadius
-                                                      .all(
-                                                      Radius.circular(
-                                                          15)),
-                                                  ),
-                                                  content: Column(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    children: <Widget>[
-                                                      const Text(
-                                                        "Scan QR code",
-                                                        style: TextStyle(
-                                                            color:
-                                                            Colors.white,
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .w900,
-                                                            fontSize: 30),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      SizedBox(width: 200,height: 200,child: QrImageView(data: widget.PHONE_NUMBER,size: 100,backgroundColor: Colors.white,gapless: true,)),
-                                                      const SizedBox(
-                                                        height: 15,
-                                                      ),
-                                                      ElevatedButton(
-                                                        style: ElevatedButton
-                                                            .styleFrom(padding: EdgeInsets.all(1),
-                                                            backgroundColor:
-                                                            Colors.white,fixedSize: Size(90, 50)
-                                                        ),
-                                                        child: const Text(
-                                                          'Copy',
+                                        child: InkWell(
+                                          onTap: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return SizedBox(
+                                                  height: 300,
+                                                  width: 300,
+                                                  child: AlertDialog(
+                                                    backgroundColor:
+                                                        const Color.fromRGBO(
+                                                            15, 15, 15, 1),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      side: BorderSide(
+                                                          color:
+                                                              Colors.black38!),
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .all(
+                                                              Radius.circular(
+                                                                  15)),
+                                                    ),
+                                                    content: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: <Widget>[
+                                                        const Text(
+                                                          "Scan QR code",
                                                           style: TextStyle(
-                                                            color:
-                                                            Colors.black,
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .w700,
-                                                            fontSize: 28,
-                                                          ),
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w900,
+                                                              fontSize: 30),
                                                         ),
-                                                        onPressed: () {
-                                                          Clipboard.setData(ClipboardData(text: "${widget.PHONE_NUMBER.toString()}+@CodeSwift")).then((_){
-                                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Email address copied to clipboard")));
-                                                          });
-                                                        },
-                                                      )
-                                                    ],
+                                                        const SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        SizedBox(
+                                                            width: 200,
+                                                            height: 200,
+                                                            child: QrImageView(
+                                                              data: widget
+                                                                  .PHONE_NUMBER,
+                                                              size: 100,
+                                                              backgroundColor:
+                                                                  Colors.white,
+                                                              gapless: true,
+                                                            )),
+                                                        const SizedBox(
+                                                          height: 15,
+                                                        ),
+                                                        ElevatedButton(
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              1),
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  fixedSize:
+                                                                      Size(90,
+                                                                          50)),
+                                                          child: const Text(
+                                                            'Copy',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              fontSize: 28,
+                                                            ),
+                                                          ),
+                                                          onPressed: () {
+                                                            Clipboard.setData(
+                                                                    ClipboardData(
+                                                                        text:
+                                                                            "${widget.PHONE_NUMBER.toString()}+@CodeSwift"))
+                                                                .then((_) {
+                                                              ScaffoldMessenger
+                                                                      .of(
+                                                                          context)
+                                                                  .showSnackBar(
+                                                                      SnackBar(
+                                                                          content:
+                                                                              Text("Email address copied to clipboard")));
+                                                            });
+                                                          },
+                                                        )
+                                                      ],
+                                                    ),
+                                                    elevation: 0,
                                                   ),
-                                                  elevation: 0,
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
+                                                );
+                                              },
+                                            );
+                                          },
                                           child: Row(
                                             children: [
                                               const Icon(Icons.qr_code),
@@ -239,7 +278,10 @@ class _home_PageState extends State<home_Page> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      InkWell(onTap: (){scanQR();},
+                                      InkWell(
+                                        onTap: () {
+                                          scanQR();
+                                        },
                                         child: const Card(
                                           color: Colors.black54,
                                           child: Padding(
@@ -249,7 +291,8 @@ class _home_PageState extends State<home_Page> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Icon(
-                                                  Icons.qr_code_scanner_outlined,
+                                                  Icons
+                                                      .qr_code_scanner_outlined,
                                                   size: 30,
                                                   color: Colors.white70,
                                                 ),
@@ -270,64 +313,64 @@ class _home_PageState extends State<home_Page> {
                                             context: context,
                                             builder: (context) {
                                               return AlertDialog(
-                                                backgroundColor: const Color.fromRGBO(
-                                                    15, 15, 15, 1),
+                                                backgroundColor:
+                                                     Colors.black45,
                                                 shape: RoundedRectangleBorder(
-                                                  side: BorderSide(color:
-                                                  Colors.black38!), borderRadius:
-                                                const BorderRadius
-                                                    .all(
-                                                    Radius.circular(
-                                                        15)),
+                                                  side: BorderSide(
+                                                      color: Colors.black38!),
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(15)),
                                                 ),
                                                 content: Column(
                                                   mainAxisSize:
-                                                  MainAxisSize.min,
+                                                      MainAxisSize.min,
                                                   children: <Widget>[
                                                     const Text(
                                                       "Enter the number",
                                                       style: TextStyle(
-                                                          color:
-                                                          Colors.white,
+                                                          color: Colors.white,
                                                           fontWeight:
-                                                          FontWeight
-                                                              .w900,
-                                                          fontSize: 30),
+                                                              FontWeight.w700,
+                                                          fontSize: 28),
                                                     ),
                                                     const SizedBox(
                                                       height: 10,
                                                     ),
                                                     TextField(
                                                       controller:
-                                                      DialogBoxValue,
+                                                          DialogBoxValue,
                                                       keyboardType:
-                                                      TextInputType
-                                                          .number,
-                                                      style:
-                                                      const TextStyle(
-                                                          color: Colors
-                                                              .white,
+                                                          TextInputType.number,
+                                                      style: const TextStyle(
+                                                          color: Colors.white,
                                                           fontSize: 20,
-                                                          letterSpacing:
-                                                          3),
+                                                          letterSpacing: 3),
                                                       autofocus: true,
                                                       decoration:
-                                                      InputDecoration(filled: true,
-                                                          focusColor:
-                                                          Colors.white,
-                                                          focusedBorder: const OutlineInputBorder(
-                                                              borderSide: BorderSide(
-                                                                  color: Colors
-                                                                      .white)),
-                                                          border:
-                                                          OutlineInputBorder(
-                                                            borderSide: const BorderSide(color: Colors.white,
-                                                                width: 5),
-                                                            borderRadius:
-                                                            BorderRadius.circular(
-                                                                12),
-                                                          ),
-                                                          fillColor: Colors.black),
+                                                          InputDecoration(
+                                                              filled: true,
+                                                              focusColor:
+                                                                  Colors.white,
+                                                              focusedBorder: const OutlineInputBorder(
+                                                                  borderSide: BorderSide(
+                                                                      color: Colors
+                                                                          .white)),
+                                                              border:
+                                                                  OutlineInputBorder(
+                                                                borderSide:
+                                                                    const BorderSide(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        width:
+                                                                            5),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            12),
+                                                              ),
+                                                              fillColor:
+                                                                  Colors.black),
                                                     ),
                                                     const SizedBox(
                                                       height: 15,
@@ -335,22 +378,66 @@ class _home_PageState extends State<home_Page> {
                                                     ElevatedButton(
                                                       style: ElevatedButton
                                                           .styleFrom(
-                                                          backgroundColor:
-                                                          Colors.white,fixedSize: Size(90, 50)
-                                                      ),
+                                                              backgroundColor:
+                                                                  Colors.white,
+                                                              fixedSize:
+                                                                  Size(90, 50)),
                                                       child: const Text(
                                                         'Pay',
                                                         style: TextStyle(
-                                                          color:
-                                                          Colors.black,
+                                                          color: Colors.black,
                                                           fontWeight:
-                                                          FontWeight
-                                                              .w700,
+                                                              FontWeight.w700,
                                                           fontSize: 30,
                                                         ),
                                                       ),
-                                                      onPressed: () {
-                                                        Navigator.of(context).pop();
+                                                      onPressed: () async {
+                                                        DocumentSnapshot
+                                                            snapshot =
+                                                            await FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    "users")
+                                                                .doc(DialogBoxValue
+                                                                    .text
+                                                                    .toString())
+                                                                .get();
+                                                        if (snapshot.exists) {
+                                                          Get.to(pay_page(
+                                                              DialogBoxValue
+                                                                  .text
+                                                                  .toString(),
+                                                              widget
+                                                                  .PHONE_NUMBER));
+                                                        } else if (DialogBoxValue
+                                                                    .text
+                                                                    .toString()
+                                                                    .trim()
+                                                                    .length >
+                                                                10 ||
+                                                            DialogBoxValue.text
+                                                                    .toString()
+                                                                    .trim()
+                                                                    .length <
+                                                                10) {
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(SnackBar(
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .red,
+                                                                  content: Text(
+                                                                      "Make Sure the Phone number is correct")));
+                                                        } else {
+                                                          ScaffoldMessenger
+                                                                  .of(context)
+                                                              .showSnackBar(const SnackBar(
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .red,
+                                                                  content: Text(
+                                                                      "Make Sure the receiver has CashSwift")));
+                                                        }
                                                       },
                                                     )
                                                   ],
