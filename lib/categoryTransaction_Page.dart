@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class categoryTransaction extends StatefulWidget {
-  String PHONE_NUMBER;
-  String category;
+  final String PHONE_NUMBER;
+  final String category;
   categoryTransaction({super.key ,required String this.PHONE_NUMBER,required String this.category});
 
   @override
@@ -15,6 +13,8 @@ class categoryTransaction extends StatefulWidget {
 }
 
 class _categoryTransactionState extends State<categoryTransaction> {
+
+   int totalAmountSpent=0;
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -32,6 +32,8 @@ class _categoryTransactionState extends State<categoryTransaction> {
           }
 
           final transactionDocs = snapshot.data!.docs;
+          for(final transaction in transactionDocs){
+            totalAmountSpent+=int.parse(transaction["amount"]);}
           return SafeArea(
             child: SingleChildScrollView(
               child: SizedBox(
@@ -42,6 +44,23 @@ class _categoryTransactionState extends State<categoryTransaction> {
                       padding: const EdgeInsets.only(left: 16),
                       child: Text(widget.category,style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 40),),
                     )),
+                    Center(
+                      child: RichText(
+                        text: TextSpan(
+                          text: "Total Amount spend: ",
+                          style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: 18),
+                          children: [
+                            TextSpan(
+                              text: '$totalAmountSpent',
+                              style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300)
+
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+
                     SizedBox(height: 30,),
                     ListView.builder(
                       itemBuilder: (BuildContext context, int index) {
@@ -50,8 +69,11 @@ class _categoryTransactionState extends State<categoryTransaction> {
                         final RecieverName = transaction['RecieverName'];
                         final date = transaction['timestampDate'];
                         final profilePicUrl = transaction["profilePicUrl"];
+
+
+
                 
-                        return Card(color: Color.fromRGBO(40, 112, 100, 0.8),margin: EdgeInsets.all(10),elevation: 12,shape: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        return Card(color: Color.fromRGBO(27, 50, 65, 0.7),margin: EdgeInsets.all(10),elevation: 12,shape: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                           child: ListTile( 
                             leading: CircleAvatar(backgroundColor:Colors.black,radius: 20, backgroundImage: profilePicUrl != null ? NetworkImage(profilePicUrl) : NetworkImage("assets/images/default_profile_pic.png") ),
                             title: Text.rich(TextSpan(children: [const TextSpan(

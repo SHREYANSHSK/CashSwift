@@ -1,18 +1,19 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:cash_swift/UiHelper.dart';
-import 'package:cash_swift/firebaseFunction.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
+import 'UiHelper.dart';
+import 'firebaseFunction.dart';
+
 class pay_page extends StatefulWidget {
-  String scanBarcode;
-  String PHONE_NUMBER;
+ final String scanBarcode;
+ final String PHONE_NUMBER;
 
   pay_page(
     String this.scanBarcode,
@@ -92,7 +93,7 @@ class _pay_pageState extends State<pay_page> {
                           ),
                           Container(width: 190,
                             child: TextField(
-                              controller: typeValue,maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
+                              controller: typeValue,
                               style: const TextStyle(overflow: TextOverflow.clip,
                                   color: Colors.white, fontSize: 20, letterSpacing: 3),
 
@@ -203,9 +204,10 @@ class _pay_pageState extends State<pay_page> {
                                                               titleMsg:
                                                                   "Payment sent",
                                                               bgColor:
-                                                                  Colors.green,
+                                                              Color.fromRGBO(
+                                                                  17, 130, 20, 0.8),
                                                               subTitleMsg:
-                                                                  "Your current balance: ${int.parse(payerData!["balance"]) - int.parse(payAmount.text)}",
+                                                                  "Your current balance: ₹${int.parse(payerData["balance"]) - int.parse(payAmount.text)}",
                                                             );
                                                           })));
 
@@ -227,11 +229,12 @@ class _pay_pageState extends State<pay_page> {
                                                           titleMsg:
                                                               "Payment Sucess",
                                                           subTitleMsg:
-                                                              "${payAmount.text} is transfered to ${snapshot.data!["Name"]}",
-                                                          bgColor: Colors.green,
+                                                              "₹${payAmount.text} is transfered to ${snapshot.data!["Name"]}",
+                                                          bgColor: Color.fromRGBO(
+                                                              17, 130, 20, 0.8),
                                                           iconData: Icons
                                                               .verified_outlined);
-                                                    firebaseFunction().addTransaction(senderID: payerData["phoneNumber"], RecieverName: snapshot.data!["Name"], recieverID: snapshot.data!["phoneNumber"], amount: payAmount.text,type: typeValue.text.toString(), profilePicUrl: snapshot.data!["profilePicUrl"]);
+                                                    firebaseFunction().addTransaction(senderID: payerData["phoneNumber"], RecieverName: snapshot.data!["Name"], recieverID: snapshot.data!["phoneNumber"], amount: payAmount.text,type: typeValue.text.toString().trim(), profilePicUrl: snapshot.data!["profilePicUrl"]);
                                                   });
                                                 }
 
@@ -261,14 +264,14 @@ class _pay_pageState extends State<pay_page> {
                                                   titleMsg: "Payment failed",
                                                   subTitleMsg:
                                                       e.message.toString(),
-                                                  bgColor: Colors.red,
+                                                  bgColor:  Color.fromRGBO(140, 13, 1, 0.8),
                                                   iconData: Icons
                                                       .error_outline_outlined);
                                             } catch (e) {
                                               UiHelper().snackBar(
                                                   titleMsg: "Payment failed",
                                                   subTitleMsg: "error",
-                                                  bgColor: Colors.red,
+                                                  bgColor:  Color.fromRGBO(140, 13, 1, 0.8),
                                                   iconData: Icons
                                                       .error_outline_outlined);
                                             }

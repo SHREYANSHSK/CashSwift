@@ -1,13 +1,12 @@
-import 'package:cash_swift/UiHelper.dart';
-import 'package:cash_swift/categoryTransaction_Page.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
+import 'categoryTransaction_Page.dart';
+
 class categoryPage extends StatefulWidget {
-  String PHONE_NUMBER;
+  final String PHONE_NUMBER;
   categoryPage({super.key, required String this.PHONE_NUMBER,});
 
   @override
@@ -64,7 +63,8 @@ class _categoryPageState extends State<categoryPage> {
                               return GestureDetector(onTap: (){Get.to(categoryTransaction(PHONE_NUMBER: widget.PHONE_NUMBER,category: typeList[index].toString(),));},
                                 child: Hero(
                                   tag: typeList[index].toString(),
-                                  child: Card(color:  Color.fromRGBO(35, 43, 43, 1),
+                                  child: Card(color:  Color.fromRGBO(
+                                      27, 50, 65, 0.5),
                                     child: Center(
                                         child: Text(
                                             typeList[index].toString().toUpperCase(),style: const TextStyle(color: Colors.white,fontSize: 50,fontWeight: FontWeight.w300),)),
@@ -86,7 +86,6 @@ class _categoryPageState extends State<categoryPage> {
               return const Text("backend error");
             }
           }),
-      bottomNavigationBar: UiHelper().showNavBar(),
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'package:cash_swift/otpVerify_Page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,9 +9,11 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'UiHelper.dart';
+import 'otpVerify_Page.dart';
 
 class signUp_Page extends StatefulWidget {
-  const signUp_Page({super.key,required PHONE_NUMBER});
+  final String PHONE_NUMBER;
+  signUp_Page({super.key,required this.PHONE_NUMBER});
 
   @override
   State<signUp_Page> createState() => signUp_PageState();
@@ -22,14 +23,18 @@ class signUp_PageState extends State<signUp_Page> {
   Color labelTextColor = Colors.black;
   TextEditingController phNo = TextEditingController();
   TextEditingController name = TextEditingController();
-  TextEditingController password = TextEditingController();
-  TextEditingController confirmPassword = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
   String phNoErrorText = "";
   String netIdErrorText = "";
-  String passwordErrorText = "";
-  String confirmPasswordErrorText = "";
   File? pickedImage;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    phNo.text=widget.PHONE_NUMBER.toString();
+  }
 
   Future showAlert() {
     return showDialog(
@@ -92,9 +97,9 @@ class signUp_PageState extends State<signUp_Page> {
     await FirebaseFirestore.instance.collection("users").doc(phNo.text.toString()).set(
         {"Name":name.text.toString(),
           "phoneNumber":phNo.text.toString(),
-          "profilePicUrl":url,
-          "balance":"1000.00"
-        }).then((value) => UiHelper().snackBar(titleMsg: "SUCCESS", subTitleMsg: "User Registered",bgColor: Colors.green));
+          if(url.isNotEmpty) "profilePicUrl" : url,
+          "balance":"1000"
+        }).then((value) => UiHelper().snackBar(titleMsg: "SUCCESS", subTitleMsg: "User Registered",bgColor: Color.fromRGBO(17, 130, 20, 0.8)));
   }
 
 
@@ -161,7 +166,7 @@ class signUp_PageState extends State<signUp_Page> {
                           setState(() {});
                         },
                         style: const TextStyle(color: Colors.white),
-                        decoration: const InputDecoration(
+                        decoration:  InputDecoration(
                           prefixIcon: Icon(
                             Icons.account_circle_outlined,
                             size: 40,
@@ -171,7 +176,7 @@ class signUp_PageState extends State<signUp_Page> {
                           filled: true,
                           labelText: "Name",
                           labelStyle: TextStyle(
-                              color: Color.fromRGBO(46, 50, 60, 1),
+                              color: Colors.white.withOpacity(0.87),
                               fontSize: 20),
                           hintText: "enter your name",
                           hintStyle: TextStyle(
@@ -187,6 +192,7 @@ class signUp_PageState extends State<signUp_Page> {
                           if (value!.isEmpty) {
                             return "Enter your name.";
                           }
+                          else return null;
                         },
                       ),
                       const SizedBox(
@@ -205,7 +211,7 @@ class signUp_PageState extends State<signUp_Page> {
                           setState(() {});
                         },
                         style: const TextStyle(color: Colors.white),
-                        decoration: const InputDecoration(
+                        decoration:  InputDecoration(
                           prefixIcon: Icon(
                             Icons.account_circle_outlined,
                             size: 40,
@@ -215,7 +221,7 @@ class signUp_PageState extends State<signUp_Page> {
                           filled: true,
                           labelText: "Phone Number",
                           labelStyle: TextStyle(
-                              color: Color.fromRGBO(46, 50, 60, 1),
+                              color: Colors.white.withOpacity(0.87),
                               fontSize: 20),
                           hintText: "enter your phone number",
                           hintStyle: TextStyle(
@@ -231,109 +237,26 @@ class signUp_PageState extends State<signUp_Page> {
                           if (value!.isEmpty) {
                             return "Enter Phone No.";
                           }
+                          else return null;
                         },
                       ),
-                      // const SizedBox(
-                      //   height: 20,
-                      // ),
-                      // TextFormField(
-                      //   style: const TextStyle(color: Colors.white),
-                      //   onTapOutside: (PointerDownEvent) {
-                      //     labelTextColor = Colors.black;
-                      //     FocusManager.instance.primaryFocus?.unfocus();
-                      //     setState(() {});
-                      //   },
-                      //   onTap: () {
-                      //     labelTextColor = Colors.yellowAccent;
-                      //     setState(() {});
-                      //   },
-                      //   controller: password,
-                      //   validator: (value) {
-                      //     if (value!.isEmpty) {
-                      //       return "Enter The Password";
-                      //     }
-                      //   },
-                      //   obscureText: true,
-                      //   decoration: const InputDecoration(
-                      //     prefixIcon: Icon(
-                      //       Icons.lock_outline,
-                      //       size: 40,
-                      //       color: Colors.white70,
-                      //     ),
-                      //     fillColor: Colors.black12,
-                      //     filled: true,
-                      //     labelText: "Password",
-                      //     labelStyle: TextStyle(
-                      //         color: Color.fromRGBO(46, 50, 60, 1),
-                      //         fontSize: 20),
-                      //     hintText: "Password",
-                      //     hintStyle: TextStyle(
-                      //         color: Color.fromRGBO(46, 50, 60, 1),
-                      //         fontSize: 15),
-                      //     enabledBorder: OutlineInputBorder(
-                      //         borderSide: BorderSide(width: 2)),
-                      //     focusedBorder: OutlineInputBorder(
-                      //         borderSide: BorderSide(
-                      //             color: Color.fromRGBO(39, 43, 51, 1))),
-                      //   ),
-                      // ),
-                      // const SizedBox(
-                      //   height: 20,
-                      // ),
-                      // TextFormField(
-                      //   style: const TextStyle(color: Colors.white),
-                      //   onTapOutside: (PointerDownEvent) {
-                      //     labelTextColor = Colors.black;
-                      //     FocusManager.instance.primaryFocus?.unfocus();
-                      //     setState(() {});
-                      //   },
-                      //   onTap: () {
-                      //     labelTextColor = Colors.yellowAccent;
-                      //     setState(() {});
-                      //   },
-                      //   controller: confirmPassword,
-                      //   obscureText: true,
-                      //   validator: (value) {
-                      //     if (value!.isEmpty) {
-                      //       return "Enter Confirm Password";
-                      //     }
-                      //   },
-                      //   decoration: const InputDecoration(
-                      //     prefixIcon: Icon(
-                      //       Icons.lock_outline,
-                      //       size: 40,
-                      //       color: Colors.white70,
-                      //     ),
-                      //     fillColor: Colors.black12,
-                      //     filled: true,
-                      //     labelText: "Confirm Password",
-                      //     labelStyle: TextStyle(
-                      //         color: Color.fromRGBO(46, 50, 60, 1),
-                      //         fontSize: 20),
-                      //     hintText: "Confirm Password",
-                      //     hintStyle: TextStyle(
-                      //         color: Color.fromRGBO(46, 50, 60, 1),
-                      //         fontSize: 15),
-                      //     enabledBorder: OutlineInputBorder(
-                      //         borderSide: BorderSide(width: 2)),
-                      //     focusedBorder: OutlineInputBorder(
-                      //         borderSide: BorderSide(
-                      //             color: Color.fromRGBO(39, 43, 51, 1))),
-                      //   ),
-                      // ),
                       const SizedBox(
                         height: 70,
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
+                            print(pickedImage.toString().isNotEmpty);
+                            print(_formKey.currentState!.validate());
+                          if(pickedImage==null){ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor:Color.fromRGBO(140, 13, 1, 1),content: Text("Choose profile Pic")));}
+                          else if (_formKey.currentState!.validate() && pickedImage.toString().isNotEmpty) {
+                            print("dh");
                             await FirebaseAuth.instance.verifyPhoneNumber(
                               phoneNumber: '+91${phNo.text.toString()}',
                               verificationCompleted:
                                   (PhoneAuthCredential credential) {},
                               verificationFailed:
                                   (FirebaseAuthException e) {
-                                UiHelper().snackBar(titleMsg: "Failed", subTitleMsg: "${e.message}",iconData: Icons.error_outline_outlined,bgColor: Colors.red);
+                                UiHelper().snackBar(titleMsg: "Failed", subTitleMsg: "${e.message}",iconData: Icons.error_outline_outlined,bgColor:  Color.fromRGBO(140, 13, 1, 1));
                               },
                               codeSent: (String verificationId,
                                   int? resendToken) {
@@ -347,11 +270,12 @@ class signUp_PageState extends State<signUp_Page> {
                             );
                             }
 
+
                         },
                         style: ElevatedButton.styleFrom(
                             maximumSize: const Size(200, 50),
                             backgroundColor:
-                                const Color.fromRGBO(64, 64, 64, 1),
+                                 Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             )),

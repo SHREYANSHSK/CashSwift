@@ -1,17 +1,19 @@
 
 import 'dart:developer';
 
-import 'package:cash_swift/UiHelper.dart';
-import 'package:cash_swift/home_Page.dart';
+import 'package:CashSwift/navBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 
+import 'UiHelper.dart';
+
 class codeVerification_Page extends StatefulWidget {
-  String verificationId;
-   String PHONE_NUMBER;
+  final String verificationId;
+   final String PHONE_NUMBER;
 
   codeVerification_Page({super.key, required this.verificationId,required this.PHONE_NUMBER});
 
@@ -129,15 +131,17 @@ class _codeVerification_PageState extends State<codeVerification_Page> {
                         UiHelper().snackBar(
                             titleMsg: "Success",
                             subTitleMsg: "Logged in Successfully",
-                            bgColor: Colors.green,
+                            bgColor: Color.fromRGBO(17, 130, 20, 0.8),
                             iconData: Icons.verified_outlined);
-                        Get.to(home_Page(PHONE_NUMBER: widget.PHONE_NUMBER,));
+                        GetStorage().write("PHONE_NUMBER", widget.PHONE_NUMBER.toString());
+                        GetStorage().write("isLoggedIn", true);
+                        Get.to(navBar());
                       }).catchError((error, stackTrace) {
                         log(error.toString());
                         UiHelper().snackBar(
                             titleMsg: "Login Failed",
                             subTitleMsg: error.toString().substring(42),
-                            bgColor: Colors.red,
+                            bgColor:  Color.fromRGBO(140, 13, 1, 0.8),
                             iconData: Icons.error_outline_outlined);
 
                       });
@@ -145,7 +149,7 @@ class _codeVerification_PageState extends State<codeVerification_Page> {
                         UiHelper().snackBar(
                             titleMsg: 'Failed',
                             subTitleMsg: 'Failed to login',
-                            bgColor: Colors.red,
+                            bgColor:  Color.fromRGBO(140, 13, 1, 0.8),
                             iconData: Icons.cancel_outlined);
                       log(ex.toString());
                     }

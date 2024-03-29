@@ -1,19 +1,19 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cash_swift/UiHelper.dart';
-import 'package:cash_swift/signUp_Page.dart';
-import 'package:cash_swift/otpVerify_Page.dart';
+import 'package:CashSwift/signUp_Page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
-import 'package:get_storage/get_storage.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'UiHelper.dart';
+import 'otpVerify_Page.dart';
 
 class login_Page extends StatefulWidget {
   const login_Page({super.key});
@@ -149,7 +149,7 @@ class _login_PageState extends State<login_Page> {
                               labelTextColor = Colors.yellowAccent;
                               bglabelColor = Colors.black.withOpacity(0.6);
                               setState(() {});
-                            },
+                            },maxLength: 10,
                             controller: Phno,
                             keyboardType: TextInputType.number,
                             onTapOutside: (PointerDownEvent) {
@@ -176,8 +176,8 @@ class _login_PageState extends State<login_Page> {
                               labelText: "phone number",
                               errorText:
                                   PhnoErrorText.isEmpty ? null : PhnoErrorText,
-                              labelStyle: const TextStyle(
-                                  color: Color.fromRGBO(46, 50, 60, 1),
+                              labelStyle:  TextStyle(
+                                  color: Colors.white.withOpacity(0.8),
                                   fontSize: 15),
                               hintText: "enter your phone number",
                               hintStyle: const TextStyle(
@@ -212,8 +212,6 @@ class _login_PageState extends State<login_Page> {
                                   } else {
                                     checkUser().then((value) async{
                                       if(value==true){
-                                        GetStorage().write("PHONE_NUMBER", Phno.text.toString());
-                                        GetStorage().write("isLoggedIn", true);
                                         await FirebaseAuth.instance.verifyPhoneNumber(
                                           phoneNumber: '+91${Phno.text.toString()}',
                                           verificationCompleted:
@@ -228,7 +226,7 @@ class _login_PageState extends State<login_Page> {
                                                 subTitleMsg: "Register first",
                                                 bgColor: Colors.teal,
                                                 iconData:
-                                                Icons.error_outline_outlined);
+                                                Icons.warning);
                                           },
                                           codeSent: (String verificationId,
                                               int? resendToken) {
@@ -252,7 +250,7 @@ class _login_PageState extends State<login_Page> {
                                             UiHelper().snackBar(
                                                 titleMsg: "ERROR!",
                                                 subTitleMsg: "Make sure the number exist or is in correct format",
-                                                bgColor: Colors.red,
+                                                bgColor:  Color.fromRGBO(140, 13, 1, 0.8),
                                                 iconData:
                                                 Icons.error_outline_outlined);
                                           },

@@ -1,14 +1,14 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cash_swift/UiHelper.dart';
-import 'package:cash_swift/login_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'login_page.dart';
 
 class profilePage extends StatefulWidget {
   @override
@@ -66,7 +66,6 @@ class _profilePageState extends State<profilePage> {
       final tempImage = File(image.path);
       setState(() async {
         pickedImage = tempImage;
-        print("hh" + (pickedImage).toString());
         uploadData();
       });
     } on Exception catch (e) {
@@ -97,10 +96,10 @@ class _profilePageState extends State<profilePage> {
                 element.reference.update({"profilePicUrl": pickedImage});
               }));
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor:Colors.green,content: Text("Profile Pic changed")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor:Color.fromRGBO(17, 130, 20, 0.8),content: Text("Profile Pic changed")));
 
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor:Colors.red,content: Text("Failed to update profile picture")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Color.fromRGBO(140, 13, 1, 0.8),content: Text("Failed to update profile picture")));
     }
   }
 
@@ -132,11 +131,16 @@ class _profilePageState extends State<profilePage> {
                     SizedBox(
                       height: 30,
                     ),
+                    snapshot.data!["profilePicUrl"].toString().isNotEmpty?
                     CircleAvatar(
                       radius: 80,
                       backgroundColor: Colors.black,
                       backgroundImage:
                           NetworkImage(snapshot.data!["profilePicUrl"]),
+                    ):CircleAvatar(
+                      radius: 80,
+                      backgroundColor: Colors.black,
+                      child: Icon(Icons.person,color: Colors.white,size: 80,),
                     ),
                     const SizedBox(height: 20),
                     Text(
@@ -173,6 +177,13 @@ class _profilePageState extends State<profilePage> {
 
                       child: const Text('Log Out'),
                     ),
+                    SizedBox(height: 200,),
+                    Center(
+                      child: Text("Developed By: Shreyansh Khandelwal",style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white60)),
+                    )
                   ],
                 ),
               );
@@ -184,7 +195,6 @@ class _profilePageState extends State<profilePage> {
               ));
             }
           }),
-      bottomNavigationBar: UiHelper().showNavBar(),
     );
   }
 }

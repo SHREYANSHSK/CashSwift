@@ -1,6 +1,5 @@
-import 'package:cash_swift/home_Page.dart';
-import 'package:cash_swift/pay_page.dart';
-import 'package:cash_swift/profile_Page.dart';
+
+import 'package:CashSwift/pay_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import 'category_Page.dart';
 
 TextEditingController DialogBoxValue = TextEditingController();
 TextEditingController addBalanceValue = TextEditingController();
@@ -29,7 +27,7 @@ class UiHelper {
       colorText: Colors.black,
       backgroundColor: bgColor,
       icon: iconData != null ? Icon(iconData) : null,
-      animationDuration: const Duration(milliseconds: 800),
+      animationDuration: const Duration(milliseconds: 500),
       overlayBlur: 2,
       forwardAnimationCurve: Curves.easeInOutCubicEmphasized,
     );
@@ -43,7 +41,7 @@ class UiHelper {
         return AlertDialog(
           backgroundColor: Colors.black45,
           shape: RoundedRectangleBorder(
-            side: BorderSide(color: Colors.black38!),
+            side: BorderSide(color: Colors.black38),
             borderRadius: const BorderRadius.all(Radius.circular(15)),
           ),
           content: Column(
@@ -60,7 +58,7 @@ class UiHelper {
                 height: 10,
               ),
               TextField(
-                controller: DialogBoxValue,
+                controller: addBalanceValue,
                 keyboardType: TextInputType.number,
                 style: const TextStyle(
                     color: Colors.white, fontSize: 20, letterSpacing: 3),
@@ -93,12 +91,13 @@ class UiHelper {
                   ),
                 ),
                 onPressed: () async {
-                  navigator?.pop();
+                  Navigator.pop(context);
                   await FirebaseFirestore.instance
                       .collection("users")
                       .doc(GetStorage().read("PHONE_NUMBER"))
-                      .update({"balance": (int.parse(balance ?? "0")+int.parse(addBalanceValue.text.toString())).toString()
-                      });
+                      .update({"balance": '${int.parse(balance!) + int.parse(addBalanceValue.text.toString())}'
+                    }).then((value) =>  Get.snackbar("Success", "₹${addBalanceValue.text} Added Successfully",backgroundColor: Color.fromRGBO(
+                      17, 130, 20, 0.8),icon: Icon(Icons.verified_outlined),snackPosition: SnackPosition.TOP));
 
                 }
               )
@@ -112,7 +111,6 @@ class UiHelper {
 
 
 
-
   showPayNUmberBox(BuildContext context, String PHONE_NUMBER) {
     return showDialog(
       context: context,
@@ -120,7 +118,7 @@ class UiHelper {
         return AlertDialog(
           backgroundColor: Colors.black45,
           shape: RoundedRectangleBorder(
-            side: BorderSide(color: Colors.black38!),
+            side: BorderSide(color: Colors.black38),
             borderRadius: const BorderRadius.all(Radius.circular(15)),
           ),
           content: Column(
@@ -138,7 +136,7 @@ class UiHelper {
               ),
               TextField(
                 controller: DialogBoxValue,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.number,maxLength: 10,
                 style: const TextStyle(
                     color: Colors.white, fontSize: 20, letterSpacing: 3),
                 autofocus: true,
@@ -178,17 +176,12 @@ class UiHelper {
                   if (snapshot.exists) {
                     Get.to(
                         pay_page(DialogBoxValue.text.toString(), PHONE_NUMBER));
-                  } else if (DialogBoxValue.text.toString().trim().length >
+                  } else if (DialogBoxValue.text.toString().length >
                           10 ||
-                      DialogBoxValue.text.toString().trim().length < 10) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        backgroundColor: Colors.red,
-                        content:
-                            Text("Make Sure the Phone number is correct")));
+                      DialogBoxValue.text.toString().length < 10) {
+                    Get.snackbar("Warning", "Make Sure the Phone number is correct",backgroundColor: Color.fromRGBO(140, 13, 1, 0.8),icon: Icon(Icons.warning),snackPosition: SnackPosition.TOP);
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text("Make Sure the receiver has CashSwift")));
+                    Get.snackbar("Warning", "Make Sure the Receiver has CashSwift",backgroundColor: Color.fromRGBO(140, 13, 1, 0.8),icon: Icon(Icons.warning),snackPosition: SnackPosition.TOP);
                   }
                 },
               )
@@ -197,45 +190,6 @@ class UiHelper {
           elevation: 0,
         );
       },
-    );
-  }
-
-  showNavBar() {
-    return BottomAppBar(
-      height: 60,
-      color: const Color.fromRGBO(15, 15, 15, 1),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        IconButton(
-            onPressed: () {
-              Get.to(home_Page(
-                  PHONE_NUMBER: GetStorage().read("PHONE_NUMBER").toString()));
-            },
-            icon: const Icon(
-              Icons.home,
-              color: Color.fromRGBO(52, 131, 118, 1),
-            )),
-        IconButton(
-            onPressed: () {
-              Get.to(categoryPage(
-                PHONE_NUMBER: GetStorage().read("PHONE_NUMBER").toString(),
-              ));
-            },
-            icon: const Icon(
-              Icons.category,
-              color: Color.fromRGBO(52, 131, 118, 1),
-            )),
-        IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.dashboard,
-              color: Color.fromRGBO(52, 131, 118, 1),
-            )),
-        IconButton(
-            onPressed: () {
-              Get.to(profilePage());
-            },
-            icon: Icon(Icons.person, color: Color.fromRGBO(52, 131, 118, 1)))
-      ]),
     );
   }
 
@@ -249,7 +203,7 @@ class UiHelper {
           child: AlertDialog(
             backgroundColor: const Color.fromRGBO(15, 15, 15, 1),
             shape: RoundedRectangleBorder(
-              side: BorderSide(color: Colors.black38!),
+              side: BorderSide(color: Colors.black38),
               borderRadius: const BorderRadius.all(Radius.circular(15)),
             ),
             content: Column(
@@ -307,4 +261,6 @@ class UiHelper {
       },
     );
   }
+
+
 }
