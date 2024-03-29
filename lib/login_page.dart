@@ -3,13 +3,14 @@ import 'dart:io';
 
 import 'package:cash_swift/UiHelper.dart';
 import 'package:cash_swift/signUp_Page.dart';
-import 'package:cash_swift/verify_Code.dart';
+import 'package:cash_swift/otpVerify_Page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -113,7 +114,7 @@ class _login_PageState extends State<login_Page> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 130,
               ),
               SizedBox(
@@ -125,23 +126,15 @@ class _login_PageState extends State<login_Page> {
                   width: 300,
                 ),
               ),
-              InkWell(
-                  onTap: () {
-                    showAlert();
-                  },
-                  child: pickedImage == null
-                      ? const CircleAvatar(
-                          radius: 60,
-                          backgroundColor: Colors.black54,
-                          child: Icon(
-                            Icons.person,
-                            size: 60,
-                            color: Colors.white,
-                          ))
-                      : CircleAvatar(
-                          radius: 60,
-                          backgroundImage: FileImage(pickedImage!),
-                        )),
+              const CircleAvatar(
+                      radius: 60,
+                      backgroundColor: Colors.black54,
+                      child: Icon(
+                        Icons.person,
+                        size: 60,
+                        color: Colors.white,
+                      )),
+
               Center(
                 child: Container(
                   alignment: Alignment.center,
@@ -178,16 +171,16 @@ class _login_PageState extends State<login_Page> {
                                 size: 40,
                                 color: Colors.white70,
                               ),
-                              fillColor: Color.fromRGBO(11, 13, 16, 1),
+                              fillColor: const Color.fromRGBO(11, 13, 16, 1),
                               filled: true,
                               labelText: "phone number",
                               errorText:
                                   PhnoErrorText.isEmpty ? null : PhnoErrorText,
-                              labelStyle: TextStyle(
+                              labelStyle: const TextStyle(
                                   color: Color.fromRGBO(46, 50, 60, 1),
                                   fontSize: 15),
                               hintText: "enter your phone number",
-                              hintStyle: TextStyle(
+                              hintStyle: const TextStyle(
                                   color: Color.fromRGBO(46, 50, 60, 1),
                                   fontSize: 15),
                               enabledBorder: const OutlineInputBorder(
@@ -219,20 +212,21 @@ class _login_PageState extends State<login_Page> {
                                   } else {
                                     checkUser().then((value) async{
                                       if(value==true){
+                                        GetStorage().write("PHONE_NUMBER", Phno.text.toString());
+                                        GetStorage().write("isLoggedIn", true);
                                         await FirebaseAuth.instance.verifyPhoneNumber(
                                           phoneNumber: '+91${Phno.text.toString()}',
                                           verificationCompleted:
                                               (PhoneAuthCredential
                                           credential) async {
-                                            await FirebaseAuth.instance
-                                                .signInWithCredential(credential);
+
                                           },
                                           verificationFailed:
                                               (FirebaseAuthException e) {
                                             UiHelper().snackBar(
-                                                titleMsg: "ERROR!",
-                                                subTitleMsg: e.message.toString(),
-                                                bgColor: Colors.red,
+                                                titleMsg: "Not Registered",
+                                                subTitleMsg: "Register first",
+                                                bgColor: Colors.teal,
                                                 iconData:
                                                 Icons.error_outline_outlined);
                                           },
@@ -257,7 +251,7 @@ class _login_PageState extends State<login_Page> {
                                               (FirebaseAuthException e) {
                                             UiHelper().snackBar(
                                                 titleMsg: "ERROR!",
-                                                subTitleMsg: e.message.toString(),
+                                                subTitleMsg: "Make sure the number exist or is in correct format",
                                                 bgColor: Colors.red,
                                                 iconData:
                                                 Icons.error_outline_outlined);
@@ -294,7 +288,7 @@ class _login_PageState extends State<login_Page> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 30,
                           ),
                           // Animate(

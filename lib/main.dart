@@ -1,13 +1,16 @@
+
 import 'package:cash_swift/firebase_options.dart';
-import 'package:cash_swift/home_Page.dart';
-import 'package:cash_swift/login_page.dart';
+import 'package:cash_swift/splashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get_storage/get_storage.dart';
 
 
 void main() async
-{ WidgetsFlutterBinding.ensureInitialized();
+{ await GetStorage.init();
+GetStorage().writeIfNull("isLoggedIn", false);
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp());
 }
@@ -21,10 +24,10 @@ class MyApp extends StatelessWidget {
 
       title: 'Money Transfer',
       theme: ThemeData(
-        primarySwatch: Colors.red,  
+        primarySwatch: Colors.teal,
         useMaterial3: false
       ),
-      home: login_Page()
+      home: splashScreen()
 
     );
   }

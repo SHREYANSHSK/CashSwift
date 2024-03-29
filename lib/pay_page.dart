@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:cash_swift/UiHelper.dart';
+import 'package:cash_swift/firebaseFunction.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
@@ -24,6 +26,7 @@ class pay_page extends StatefulWidget {
 
 class _pay_pageState extends State<pay_page> {
   TextEditingController payAmount = TextEditingController();
+  TextEditingController typeValue = TextEditingController();
   var payerBalance;
   @override
   Widget build(BuildContext context) {
@@ -85,9 +88,29 @@ class _pay_pageState extends State<pay_page> {
                                 fontWeight: FontWeight.w700),
                           ),
                           const SizedBox(
-                            height: 70,
+                            height: 50,
                           ),
-                          
+                          Container(width: 190,
+                            child: TextField(
+                              controller: typeValue,maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
+                              style: const TextStyle(overflow: TextOverflow.clip,
+                                  color: Colors.white, fontSize: 20, letterSpacing: 3),
+
+                              decoration: InputDecoration(
+                                  prefixIcon: Icon(Icons.category,color: Colors.white60,),
+                                  filled: true,
+                                  focusColor: Colors.white,labelText: "Type",labelStyle: TextStyle(color: Colors.white60),
+                                  focusedBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.white)),
+                                  border: OutlineInputBorder(
+                                    borderSide:
+                                    const BorderSide(color: Colors.white, width: 5,style: BorderStyle.solid),
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  fillColor: Colors.black38),
+                            ),
+                          ),
+                          SizedBox(height: 30,),
                           Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -199,14 +222,17 @@ class _pay_pageState extends State<pay_page> {
                                                             int.parse(
                                                                 payAmount.text))
                                                         .toString(),
-                                                  }).then((value) => UiHelper().snackBar(
+                                                  }).then((value)  {UiHelper().snackBar(
+                                                    
                                                           titleMsg:
                                                               "Payment Sucess",
                                                           subTitleMsg:
                                                               "${payAmount.text} is transfered to ${snapshot.data!["Name"]}",
                                                           bgColor: Colors.green,
                                                           iconData: Icons
-                                                              .verified_outlined));
+                                                              .verified_outlined);
+                                                    firebaseFunction().addTransaction(senderID: payerData["phoneNumber"], RecieverName: snapshot.data!["Name"], recieverID: snapshot.data!["phoneNumber"], amount: payAmount.text,type: typeValue.text.toString(), profilePicUrl: snapshot.data!["profilePicUrl"]);
+                                                  });
                                                 }
 
                                                     else{
@@ -271,6 +297,11 @@ class _pay_pageState extends State<pay_page> {
                     ),
                   ),
                 );
+
+
+
+
+
               } else {
                 return const Center(child: Text("Error in fetching data"));
               }
