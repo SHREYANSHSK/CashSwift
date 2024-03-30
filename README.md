@@ -24,7 +24,7 @@ To get started with CashSwift, follow these steps:
 
 Clone the repository:
 ```bash
-git clone https://github.com/your-username/cashswift.git
+https://github.com/SHREYANSHSK/CashSwift.git
 ```
 Install dependencies:
 ```bash
