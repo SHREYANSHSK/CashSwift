@@ -289,40 +289,7 @@ class _login_PageState extends State<login_Page> {
                           const SizedBox(
                             height: 30,
                           ),
-                          // Animate(
-                          //   effects: const [
-                          //     FadeEffect(
-                          //         duration: Duration(milliseconds: 1000),
-                          //         delay: Duration(milliseconds: 1100))
-                          //   ],
-                          //   child: Container(
-                          //     decoration: BoxDecoration(color: Color.fromRGBO(64, 64, 64, 1),borderRadius: BorderRadius.circular(12)),
-                          //     child: ElevatedButton(
-                          //       onPressed: () {
-                          //         Navigator.push(
-                          //             context,
-                          //         MaterialPageRoute(
-                          //         builder: (context) => signUp_Page()));
-                          //       },
-                          //       style: ElevatedButton.styleFrom(
-                          //           maximumSize: const Size(200, 50),
-                          //           backgroundColor: Colors.transparent,shadowColor: Colors.transparent,
-                          //           shape: RoundedRectangleBorder(
-                          //               borderRadius: BorderRadius.circular(12))),
-                          //       child: Center(
-                          //         child: Text(
-                          //           "SignUp",
-                          //           style: GoogleFonts.roboto(
-                          //               fontSize: 32,
-                          //               color: Colors.black,
-                          //               letterSpacing: 1,
-                          //               fontWeight: FontWeight.bold),
-                          //         ),
-                          //
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
+
                         ],
                       ),
                     ),

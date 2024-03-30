@@ -249,7 +249,6 @@ class signUp_PageState extends State<signUp_Page> {
                             print(_formKey.currentState!.validate());
                           if(pickedImage==null){ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor:Color.fromRGBO(140, 13, 1, 1),content: Text("Choose profile Pic")));}
                           else if (_formKey.currentState!.validate() && pickedImage.toString().isNotEmpty) {
-                            print("dh");
                             await FirebaseAuth.instance.verifyPhoneNumber(
                               phoneNumber: '+91${phNo.text.toString()}',
                               verificationCompleted:

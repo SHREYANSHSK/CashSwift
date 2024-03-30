@@ -249,7 +249,7 @@ class UiHelper {
                             text: "${PHONE_NUMBER.toString()}+@CodeSwift"))
                         .then((_) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text("Email address copied to clipboard")));
+                          content: Text("UPI ID copied to clipboard")));
                     });
                   },
                 )

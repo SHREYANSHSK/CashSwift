@@ -408,10 +408,10 @@ class home_PageState extends State<home_Page> {
                                 child: StreamBuilder<QuerySnapshot>(
                                   stream: FirebaseFirestore.instance
                                       .collection("transaction")
-                                      .where('senderID',
-                                          isEqualTo: widget.PHONE_NUMBER)
-                                      .orderBy("timestampTime",
-                                          descending: true)
+                                      .where(Filter.or(Filter('senderID',
+                                      isEqualTo: widget.PHONE_NUMBER),Filter("recieverID", isEqualTo: widget.PHONE_NUMBER)))
+                                      .orderBy("timestampDate",
+                                          descending: true).orderBy("timestampTime",descending: true)
                                       .snapshots(),
                                   builder: (BuildContext context,
                                       AsyncSnapshot<QuerySnapshot>
@@ -432,35 +432,33 @@ class home_PageState extends State<home_Page> {
                                     final transactionDocs =
                                         snapshot.data!.docs;
                                     return ListView.builder(
-                                      itemBuilder: (BuildContext context,
-                                          int index) {
-                                        final transaction =
-                                            transactionDocs[index];
-                                        final amount =
-                                            transaction['amount'];
-                                        final RecieverName =
-                                            transaction['RecieverName'];
-                                        final date =
-                                            transaction['timestampDate'];
-                                        final profilePicUrl =
-                                            transaction["profilePicUrl"];
+                                      itemBuilder: (BuildContext context, int index) {
+                                        final transaction = transactionDocs[index];
+                                        final amount = transaction['amount'];
+                                        final receiverName = transaction['RecieverName'];
+                                        final senderID = transaction["senderID"];
+                                        final receiverID = transaction["recieverID"];
+                                        final date = transaction['timestampDate'];
+                                        final profilePicUrl = transaction["profilePicUrl"];
+
+
+                                        final bool isSender = senderID == widget.PHONE_NUMBER;
+                                        final bool isReceiver = receiverID == widget.PHONE_NUMBER;
+
 
                                         return ListTile(
                                           leading: Container(
                                             height: 40,
                                             width: 50,
                                             decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
+                                              borderRadius: BorderRadius.circular(10),
                                               color: Colors.black,
-                                              image: DecorationImage(
-                                                  image: profilePicUrl !=
-                                                          null
-                                                      ? NetworkImage(
-                                                          profilePicUrl)
-                                                      :  NetworkImage(
-                                                          Icons.person.toString()),
-                                                  fit: BoxFit.cover),
+                                              image: profilePicUrl != null
+                                                  ? DecorationImage(
+                                                image: NetworkImage(profilePicUrl),
+                                                fit: BoxFit.cover,
+                                              )
+                                                  : null,
                                             ),
                                           ),
                                           title: Text.rich(
@@ -469,14 +467,16 @@ class home_PageState extends State<home_Page> {
                                                 const TextSpan(
                                                   text: 'Amount: ',
                                                   style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
-                                                TextSpan(
-                                                  text: '$amount',
-                                                  style: const TextStyle(
-                                                      color: Colors.white),
+                                                isSender?TextSpan(
+                                                  text: '-$amount',
+                                                  style: const TextStyle(color: Colors.white),
+                                                ):TextSpan(
+                                                  text: '+$amount',
+                                                  style: const TextStyle(color: Colors.white),
                                                 ),
                                               ],
                                             ),
@@ -484,46 +484,52 @@ class home_PageState extends State<home_Page> {
                                           subtitle: Text.rich(
                                             TextSpan(
                                               children: [
-                                                const TextSpan(
-                                                  text: 'Reciever: ',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                TextSpan(
-                                                  text: '$RecieverName',
-                                                  style: const TextStyle(
-                                                      color: Colors.white),
-                                                ),
+                                                 isReceiver? TextSpan(
+                                                     text: 'Sender: ',
+                                                     style: TextStyle(
+                                                       color: Colors.white,
+                                                       fontWeight: FontWeight.bold,
+                                                     )
+                                                 ):TextSpan(
+                                                     text: 'Recipient: ',
+                                                     style: TextStyle(
+                                                       color: Colors.white,
+                                                       fontWeight: FontWeight.bold,
+                                                     )
+                                                 ),
+                                                isReceiver? TextSpan(
+                                                  text:  senderID,
+                                                  style: const TextStyle(color: Colors.white),
+                                                ):TextSpan(
+                                                  text: receiverName,
+                                                  style: const TextStyle(color: Colors.white),
+                                                )
                                               ],
                                             ),
                                           ),
-
                                           trailing: Text.rich(
                                             TextSpan(
                                               children: [
                                                 const TextSpan(
                                                   text: 'Date:\n',
                                                   style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                                 TextSpan(
                                                   text: '$date',
-                                                  style: const TextStyle(
-                                                      color: Colors.white),
+                                                  style: const TextStyle(color: Colors.white),
                                                 ),
                                               ],
                                             ),
                                           ),
-                                          // Add other transaction details as needed
                                         );
                                       },
                                       itemCount: transactionDocs.length,
                                       shrinkWrap: true,
                                     );
+                                    ;
                                   },
                                 ),
                               )

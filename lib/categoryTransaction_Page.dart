@@ -110,7 +110,6 @@ class _categoryTransactionState extends State<categoryTransaction> {
                             ],
                             ),
                             ),
-                            // Add other transaction details as needed
                           ),
                         );
                       },
