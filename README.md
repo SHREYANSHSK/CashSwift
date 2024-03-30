@@ -13,7 +13,7 @@ CashSwift is a mobile application built with Flutter that provides a convenient 
 <h4>Secure Authentication:</h4> Log in securely using phone authentication with Firebase Authentication.
 <h4>Real-time Updates:</h4> Get instant updates on your transactions and account balance with Firebase Cloud Firestore.
 
-
+<br><br><br>
 <h2>Demo</h2>
 https://github.com/SHREYANSHSK/Code-Swift/assets/113106873/e6ba55f2-c338-4bfb-b894-2d800c1656e8
 
